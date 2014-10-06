@@ -8,7 +8,7 @@ from pylearn2.training_algorithms.sgd import MonitorBasedLRAdjuster
 from pylearn2.train_extensions.best_params import MonitorBasedSaveBest
 
 class EncoderTraining:
-    def __init__(self, data_path="./", save_path="training.pkl", simulation_data = None):
+    def __init__(self, data_path="./datasets/", save_path="training.pkl", simulation_data = None):
         self.data_path = data_path
         self.save_path = save_path
         if simulation_data != None:

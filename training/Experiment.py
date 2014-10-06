@@ -5,7 +5,7 @@ from ExperimentsArgumentsGenerator import generate_arguments_for_experiments
 
 class Experiment(object):
 	"""docstring for Experiment"""
-	def __init__(self, data_path='./', save_path='./'):
+	def __init__(self, data_path='./datasats/', save_path='./'):
 		super(Experiment, self).__init__()
 		self.data_path = data_path
 		self.save_path = save_path
