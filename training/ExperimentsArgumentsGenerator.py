@@ -49,5 +49,5 @@ def print_experiments():
 		print exp
 	print len(array_experiments)
 
-generate_arguments_for_experiments()
-print_experiments()
+# generate_arguments_for_experiments()
+# print_experiments()

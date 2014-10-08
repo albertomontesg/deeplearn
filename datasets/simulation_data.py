@@ -69,16 +69,16 @@ class SimulationData(object):
 	def get_matrix(self):
 		return self.data
 	
-if __name__ == '__main__':
-	sim = SimulationData()
-	sim.load_data()
-	sim.preprocessor()
-	sim.save_data()
-	print sim.data
-	print sim.num_simulations
-	print sim.input_values
-	print sim.output_values
-	x,y=sim.get_matrix().get_data()
-	print x
-	print y
-	#print sim.get_matrix().get_batch_design(batch_size=100)
+# if __name__ == '__main__':
+# 	sim = SimulationData()
+# 	sim.load_data()
+# 	sim.preprocessor()
+# 	sim.save_data()
+# 	print sim.data
+# 	print sim.num_simulations
+# 	print sim.input_values
+# 	print sim.output_values
+# 	x,y=sim.get_matrix().get_data()
+# 	print x
+# 	print y
+# 	#print sim.get_matrix().get_batch_design(batch_size=100)
