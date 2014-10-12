@@ -1,7 +1,7 @@
-from EncoderTraining import EncoderTraining
+
+from experiment.EncoderTraining import EncoderTraining
 from datasets.simulation_data import SimulationData
 from ExperimentsArgumentsGenerator import generate_arguments_for_experiments as generator
-
 
 class Experiment(object):
 	"""docstring for Experiment"""
@@ -30,12 +30,11 @@ class Experiment(object):
 		else:
 			self.experiments_arguments = attributes
 
-		print len(self.experiments_arguments)
 		i = 1000
 		# for arg in self.experiments_arguments:
 		# 	set_single_experiment(attributes = arg, id = i)
 		#	i = i + 1
-		self.set_single_experiment(attributes=self.experiments_arguments[999], identifier = i)
+		self.set_single_experiment(attributes=self.experiments_arguments[869], identifier = i)
 		
 	def set_single_experiment(self, 
 							num_layers=4,
@@ -81,6 +80,6 @@ class Experiment(object):
 	def run_experiments(self):
 		i = 0
 		for exp in self.experiments:
-			print "Running experiment %d:" % i
+			print ("Running experiment ", i, ":")
 			i = i + 1
 			exp.train_experiment()

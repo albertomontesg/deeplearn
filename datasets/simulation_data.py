@@ -5,20 +5,21 @@ from pylearn2.utils import serial
 from pylearn2.datasets.preprocessing import MakeUnitNorm
 
 class SimulationData(object):
-	def __init__(self, sim_path="./datasets/", save_path="data.pkl"):
+	def __init__(self, sim_path="./datasets/", save_path="./datasets/data.pkl"):
 		self.sim_path = sim_path
 		self.save_path = save_path  
 		self.input_file_name = 'simulation_input.txt'
 		self.output_file_name = 'simulation_output.txt'
 		
 	def load_data(self):
-		print "Starting loading data..."
+		print ("Starting loading data...")
 		
 		matrix_input = self.import_file(self.sim_path + self.input_file_name)
 		matrix_output = self.import_file(self.sim_path + self.output_file_name)
 		
 		self.data = DenseDesignMatrix(X = matrix_input, y = matrix_output)
-		print "Data load completed"
+		self.data.split_dataset_holdout(train_prop = 0.8)
+		print ("Data load completed")
 		return self.data
 	
 	def import_file(self, file):
@@ -38,11 +39,10 @@ class SimulationData(object):
 				values = lines[i].split('\t')
 				try:
 					for value in values:
-						matrix[r].append(float(value))
-					
+						matrix[r].append(float(value))	
 				except ValueError,e:
 					#print "error",e,"on line",line
-					c=c+1
+				 	c=c+1
 	
 		matrix.pop()
 		array = np.array(matrix, dtype=np.float32)
@@ -64,21 +64,7 @@ class SimulationData(object):
 		
 	def save_data(self):
 		serial.save(self.sim_path + self.save_path, self.data)
-		print "Data saved in " + self.sim_path + self.save_path
+		print ("Data saved in ", self.sim_path, self.save_path)
 		
 	def get_matrix(self):
 		return self.data
-	
-# if __name__ == '__main__':
-# 	sim = SimulationData()
-# 	sim.load_data()
-# 	sim.preprocessor()
-# 	sim.save_data()
-# 	print sim.data
-# 	print sim.num_simulations
-# 	print sim.input_values
-# 	print sim.output_values
-# 	x,y=sim.get_matrix().get_data()
-# 	print x
-# 	print y
-# 	#print sim.get_matrix().get_batch_design(batch_size=100)
