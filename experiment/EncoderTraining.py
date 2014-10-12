@@ -81,8 +81,8 @@ class EncoderTraining:
 								termination_criterion = EpochCounter(max_epochs))
 	
 	def set_extensions(self, extensions=None):
-		self.extensions = None #[MonitorBasedSaveBest(channel_name='valid_y_mse',
-		#										save_path = 'training_best.pkl')]
+		self.extensions = [MonitorBasedSaveBest(channel_name='objective',
+												save_path = './training/training_monitor_best.pkl')]
 		
 	def set_attributes(self, attributes):
 		self.attributes = attributes
