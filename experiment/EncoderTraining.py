@@ -9,6 +9,8 @@ from pylearn2.training_algorithms.sgd import SGD
 from pylearn2.training_algorithms.sgd import MonitorBasedLRAdjuster
 from pylearn2.train_extensions.best_params import MonitorBasedSaveBest
 
+import sys
+
 class EncoderTraining:
 	def __init__(self, data_path="./datasets/", save_path="training.pkl", simulation_data = None, identifier = 0):
 		self.id = identifier
@@ -47,21 +49,21 @@ class EncoderTraining:
 	def get_structure(self):
 		return self.structure
 		
-	def get_autoencoder(self, structure, encoder='sigmoid'):
+	def get_autoencoder(self, structure, act_function='sigmoid'):
 		n_input, n_output = structure
 		config = {
 			'nvis': n_input,
 			'nhid': n_output,
-			'act_enc': encoder,
-			'act_dec': encoder,
+			'act_enc': act_function,
+			'act_dec': act_function,
 			"irange" : 0.05,
 			}
 		return Autoencoder(**config)
 		
-	def get_layers(self, encoder='tanh'):
+	def get_layers(self, act_function='tanh'):
 		self.layers = []
 		for pair in self.structure:
-			self.layers.append(self.get_autoencoder(structure = pair, encoder=encoder))
+			self.layers.append(self.get_autoencoder(structure = pair, act_function=act_function))
 		return self.layers
 		   
 	def get_model(self):
@@ -98,3 +100,34 @@ class EncoderTraining:
 
 	def train_experiment(self):
 		self.experiment.main_loop()
+
+
+if __name__ == '__main__':
+
+    args = sys.argv
+    print str(args)
+
+    # learning_rate = args[1]
+    # activation_function = args[2]
+    # batch_size = args[3]
+    # epochs = args[4]
+    # identifier = args[0]
+
+    # save_path = save_path+'training_encoder_%d.pkl' % (identifier)
+    # experiment = EncoderTraining(data_path = self.data_path, 
+    #                             save_path = save_path, 
+    #                             simulation_data = self.sim_data,
+    #                             identifier = identifier)
+
+    # experiment.set_attributes(attributes)
+    # # Set up the experiment
+    # experiment.set_structure(num_layers = num_layers)
+    # experiment.get_layers(encoder = activation_function)
+    # experiment.get_model()
+    # experiment.set_training_criteria(learning_rate = learning_rate,
+    #                         batch_size = batch_size,
+    #                         max_epochs = epochs)
+    # experiment.set_extensions()
+    # experiment.define_training_experiment()
+
+    # experiment.train_experiment()

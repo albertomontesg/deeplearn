@@ -4,6 +4,8 @@ from pylearn2.datasets.dense_design_matrix import DenseDesignMatrix
 from pylearn2.utils import serial
 from pylearn2.datasets.preprocessing import MakeUnitNorm
 
+import time
+
 class SimulationData(object):
 	def __init__(self, sim_path="./datasets/", save_path="./datasets/data.pkl"):
 		self.sim_path = sim_path
@@ -13,13 +15,16 @@ class SimulationData(object):
 		
 	def load_data(self):
 		print ("Starting loading data...")
+		starting = time.time()
 		
 		matrix_input = self.import_file(self.sim_path + self.input_file_name)
 		matrix_output = self.import_file(self.sim_path + self.output_file_name)
 		
 		self.data = DenseDesignMatrix(X = matrix_input, y = matrix_output)
 		self.data.split_dataset_holdout(train_prop = 0.8)
-		print ("Data load completed")
+
+		ending = time.time()
+		print "Data load completed (%d seconds)" % (ending-starting)
 		return self.data
 	
 	def import_file(self, file):

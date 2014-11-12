@@ -67,7 +67,7 @@ class Experiment(object):
 		experiment.set_attributes(attributes)
 		# Set up the experiment
 		experiment.set_structure(num_layers = num_layers)
-		experiment.get_layers(encoder = activation_function)
+		experiment.get_layers(act_function = activation_function)
 		experiment.get_model()
 		experiment.set_training_criteria(learning_rate = learning_rate,
 								batch_size = batch_size,
