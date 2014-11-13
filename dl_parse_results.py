@@ -7,6 +7,8 @@ num_simulations = len(generator())
 
 results_file = open('./results.csv', 'w')
 
+
+results_file.writelines(["Id;num_layers;lr;act_function;batch_size;epochs;objective"])
 identifier = 10000
 for i in range(num_simulations):
 	identifier += 1
@@ -30,7 +32,7 @@ for i in range(num_simulations):
 			objective = l.split('objective: ')[1].split('\n')[0]
 	#print objective
 
-	single_result = ident + ' ' + num_layers + ' ' + lr + ' ' + act_function + ' ' + batch_size + ' ' + epochs + ' ' + objective+ '\n'
+	single_result = ident + ';' + num_layers + ';' + lr + ';' + act_function + ';' + batch_size + ';' + epochs + ';' + objective+ '\n'
 	results_file.writelines([single_result])
 
 results_file.close()
