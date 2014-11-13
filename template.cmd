@@ -2,9 +2,9 @@
 
 # @ job_name = Encoder_%d
 # @ initialdir = ./
-# @ output = outputs/EncoderTraining_%d.out <- canviar per un directori
-# @ error = errors/EncoderTraining_%d.err <- Canviar per un directori
-# @ wall_clock_limit = 00:05:00
+# @ output = outputs/EncoderTraining_%d.out
+# @ error = errors/EncoderTraining_%d.err
+# @ wall_clock_limit = 00:%02d:00
 # @ cpus_per_task = 12
 # @ tasks_per_node = 1
 # @ total_tasks = 1

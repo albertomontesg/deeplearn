@@ -24,3 +24,6 @@ module load oscar-modules/1.0.3 transfer/1.0 gcc/4.6.1 bullxmpi/bullxmpi-1.1.11.
 python EncoderTraining.py $A $B $C $D
 echo $A $B $C >> results.csv
 cat out/%j.out | grep objective: | cut -c 13-25 | tail -1 >> results.csv
+
+
+per fer les RBM mirar informacio de 

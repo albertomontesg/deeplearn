@@ -1,0 +1,51 @@
+# Identifier: 10001
+# Number of layers: 3
+# Learning Rate: 0.05
+# Activation Function: tanh
+# Batch Size: 5
+# Epochs: 5
+Starting loading data...
+Data load completed (12 seconds)
+Parameter and initial learning rate summary:
+	vb: 0.05
+	hb: 0.05
+	W: 0.05
+	Wprime: 0.05
+	vb: 0.05
+	hb: 0.05
+	W: 0.05
+	Wprime: 0.05
+	vb: 0.05
+	hb: 0.05
+	W: 0.05
+	Wprime: 0.05
+Compiling sgd_update...
+Compiling sgd_update done. Time elapsed: 3.538056 seconds
+compiling begin_record_entry...
+compiling begin_record_entry done. Time elapsed: 0.035591 seconds
+Monitored channels: 
+	learning_rate
+	objective
+	total_seconds_last_epoch
+	training_seconds_this_epoch
+Compiling accum...
+graph size: 25
+Compiling accum done. Time elapsed: 0.423490 seconds
+Monitoring step:
+	Epochs seen: 0
+	Batches seen: 0
+	Examples seen: 0
+	learning_rate: 0.05
+	objective: 1.00002212359
+	total_seconds_last_epoch: 0.0
+	training_seconds_this_epoch: 0.0
+Time this epoch: 46.810757 seconds
+Monitoring step:
+	Epochs seen: 1
+	Batches seen: 2000
+	Examples seen: 10000
+	learning_rate: 0.05
+	objective: 0.632515160819
+	total_seconds_last_epoch: 0.0
+	training_seconds_this_epoch: 46.810757
+Time this epoch: 48.746919 seconds
