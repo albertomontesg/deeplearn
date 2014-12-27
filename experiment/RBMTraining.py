@@ -1,12 +1,11 @@
 # Local imports
 from datasets.simulation_data import SimulationData
 # pylearn imports
-from pylearn2.models.autoencoder import Autoencoder, DeepComposedAutoencoder
+from pylearn2.models.rbm import RBM
 from pylearn2.termination_criteria import EpochCounter
-from pylearn2.costs.autoencoder import MeanSquaredReconstructionError
+from pylearn2.costs.mlp import Default
 from pylearn2.train import Train
-from pylearn2.training_algorithms.sgd import SGD
-from pylearn2.training_algorithms.sgd import MonitorBasedLRAdjuster
+from pylearn2.training_algorithms.default import DefaultTrainingAlgorithm
 from pylearn2.train_extensions.best_params import MonitorBasedSaveBest
 
 class RBMTraining:
@@ -23,70 +22,43 @@ class RBMTraining:
 		
 	def load_data(self):
 		self.sim_data.load_data()
-		self.sim_data.preprocessor()
-		self.save_data_loaded()
+		self.sim_data.preprocessor() 
 
-	def save_data_loaded(self):
-		self.data_matrix = self.sim_data.get_matrix()
+		tmp = self.sim_data.split_train_test()
+		self.datasets = {'train' : tmp[0], 'test' : tmp[1]}
+
 		self.num_simulations = self.sim_data.num_simulations
 		self.input_values = self.sim_data.input_values
 		self.output_values = self.sim_data.output_values
 
 	def set_structure(self, num_layers = 4, shape = 'linear'):
-		structure = []
-
-		lower_number = self.input_values
-		for i in range(num_layers):
-			upper_number = lower_number
-			lower_number = self.input_values-(i+1)*(self.input_values-self.output_values)/num_layers
-			structure.append([upper_number, lower_number])
+		self.vis = self.input_values
+		self.hid = self.output_values
+		return [self.vis, self.hid]
 		
-		self.structure = structure
-		return structure
-		
-	def get_structure(self):
-		return self.structure
-		
-	def get_RBM_Layer(self, structure, encoder='sigmoid'):
-		n_input, n_output = structure
-		config = {
-			'nvis': n_input,
-			'nhid': n_output,
-			"irange" : 0.05,
-			}
-		return RBM(**config)
-		
-	def get_layers(self, encoder='tanh'):
-		self.layers = []
-		for pair in self.structure:
-			self.layers.append(self.get_RBM_Layer(structure = pair, encoder=encoder))
-		return self.layers
 		   
 	def get_model(self):
-		self.model = MLP(self.layers)
+		self.model = RBM(nvis=self.vis, nhid=self.hid, irange=.05)
 		return self.model
 	   
 	def set_training_criteria(self, 
-							learning_rate=0.05, 
-							cost=MeanSquaredReconstructionError(), 
+							learning_rate=0.05,
 							batch_size=10, 
 							max_epochs=10):
-		dataset = self.data_matrix
-		self.training_alg = SGD(learning_rate = learning_rate, 
-								cost = cost, 
-								batch_size = batch_size, 
-								monitoring_dataset = dataset, 
-								termination_criterion = EpochCounter(max_epochs))
+		
+		self.training_alg = DefaultTrainingAlgorithm(batch_size = batch_size, 
+													monitoring_dataset = self.datasets, 
+													termination_criterion = EpochCounter(max_epochs))
 	
 	def set_extensions(self, extensions=None):
-		self.extensions = [MonitorBasedSaveBest(channel_name='objective',
-												save_path = './training/training_monitor_best.pkl')]
+		self.extensions = None #[MonitorBasedSaveBest(channel_name='objective',
+												#save_path = './training/training_monitor_best.pkl')]
 		
 	def set_attributes(self, attributes):
 		self.attributes = attributes
 
 	def define_training_experiment(self, save_freq = 10):
-		self.experiment = Train(dataset=self.data_matrix, 
+		self.experiment = Train(dataset=self.datasets['train'], 
 								model=self.model, 
 								algorithm=self.training_alg, 
 								save_path=self.save_path , 

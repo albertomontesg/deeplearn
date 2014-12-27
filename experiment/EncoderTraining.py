@@ -8,6 +8,10 @@ from pylearn2.train import Train
 from pylearn2.training_algorithms.sgd import SGD
 from pylearn2.training_algorithms.sgd import MonitorBasedLRAdjuster
 from pylearn2.train_extensions.best_params import MonitorBasedSaveBest
+from pylearn2.utils import serial
+
+from numpy import mean, square
+import theano
 
 import sys
 
@@ -26,10 +30,10 @@ class EncoderTraining:
 	def load_data(self):
 		self.sim_data.load_data()
 		self.sim_data.preprocessor()
-		self.save_data_loaded()
 
-	def save_data_loaded(self):
-		self.data_matrix = self.sim_data.get_matrix()
+		tmp = self.sim_data.split_train_test()
+		self.datasets = {'train' : tmp[0], 'test' : tmp[1]}
+
 		self.num_simulations = self.sim_data.num_simulations
 		self.input_values = self.sim_data.input_values
 		self.output_values = self.sim_data.output_values
@@ -75,22 +79,22 @@ class EncoderTraining:
 							cost=MeanSquaredReconstructionError(), 
 							batch_size=10, 
 							max_epochs=10):
-		dataset = self.data_matrix
+		
 		self.training_alg = SGD(learning_rate = learning_rate, 
 								cost = cost, 
 								batch_size = batch_size, 
-								monitoring_dataset = dataset, 
+								monitoring_dataset = self.datasets, 
 								termination_criterion = EpochCounter(max_epochs))
 	
 	def set_extensions(self, extensions=None):
-		self.extensions = [MonitorBasedSaveBest(channel_name='objective',
+		self.extensions = [MonitorBasedSaveBest(channel_name='test_objective',
 												save_path = './training/training_monitor_best.pkl')]
 		
 	def set_attributes(self, attributes):
 		self.attributes = attributes
 
 	def define_training_experiment(self, save_freq = 10):
-		self.experiment = Train(dataset=self.data_matrix, 
+		self.experiment = Train(dataset=self.datasets['train'], 
 								model=self.model, 
 								algorithm=self.training_alg, 
 								save_path=self.save_path , 
@@ -100,6 +104,19 @@ class EncoderTraining:
 
 	def train_experiment(self):
 		self.experiment.main_loop()
+
+	def computeMSE(self):
+		model = serial.load('./training/training_monitor_best.pkl')
+		X=model.get_input_space().make_theano_batch()
+		Y=model.encode(X)
+		f=theano.function([X], Y)
+		x_test = self.datasets['test'].X
+		y_test = self.datasets['test'].y
+		y_pred = f(x_test)
+
+		MSE = mean(square(y_test - y_pred))
+		print MSE
+
 
 
 if __name__ == '__main__':
